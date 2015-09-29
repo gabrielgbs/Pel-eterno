@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="projeto" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="default">
+				<Option output="ProjetoPele" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+			</Target>
+		</Build>
+		<Linker>
+			<Add library="glut32" />
+			<Add library="glu32" />
+			<Add library="opengl32" />
+			<Add library="winmm" />
+			<Add library="gdi32" />
+		</Linker>
+		<Unit filename="Arquib.cpp" />
+		<Unit filename="Arquib.hpp" />
+		<Unit filename="Bola.cpp" />
+		<Unit filename="Bola.hpp" />
+		<Unit filename="Campo.cpp" />
+		<Unit filename="Campo.hpp" />
+		<Unit filename="Cenario.cpp" />
+		<Unit filename="Cenario.hpp" />
+		<Unit filename="Jogador.cpp" />
+		<Unit filename="Jogador.hpp" />
+		<Unit filename="Placa.cpp" />
+		<Unit filename="Placa.hpp" />
+		<Unit filename="Refletor.cpp" />
+		<Unit filename="Refletor.hpp" />
+		<Unit filename="Trave.cpp" />
+		<Unit filename="Trave.hpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="texturaTGA.c">
+			<Option compilerVar="CPP" />
+		</Unit>
+		<Unit filename="texturaTGA.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
