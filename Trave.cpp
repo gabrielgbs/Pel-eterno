@@ -4,7 +4,7 @@ Trave::Trave(float x, float z, float w, float d){
      posX = (x+x+w)/2;
      posZ1 = z;
      posZ2 = z + d;
-     
+
      t1e = gluNewQuadric();
      t1d = gluNewQuadric();
      t2e = gluNewQuadric();
@@ -34,7 +34,7 @@ void Trave::desenha(){
 		glRotated(90,1,0,0);
 		gluCylinder(t1e,TRAVE_ESPESS, TRAVE_ESPESS, TRAVE_ALTURA,10,2);
 	glPopMatrix();
-	
+
 
 	gluQuadricDrawStyle(t1d, GLU_FILL);
 	glPushMatrix();
@@ -42,7 +42,7 @@ void Trave::desenha(){
 		glRotated(90,1,0,0);
 		gluCylinder(t1d,TRAVE_ESPESS, TRAVE_ESPESS, TRAVE_ALTURA,10,2);
 	glPopMatrix();
-	
+
 
 	gluQuadricDrawStyle(t2e, GLU_FILL);
 	glPushMatrix();
@@ -50,7 +50,7 @@ void Trave::desenha(){
 		glRotated(90,1,0,0);
 		gluCylinder(t2e,TRAVE_ESPESS, TRAVE_ESPESS, TRAVE_ALTURA,10,2);
 	glPopMatrix();
-	
+
 
 	gluQuadricDrawStyle(t2d, GLU_FILL);
 	glPushMatrix();
@@ -58,7 +58,7 @@ void Trave::desenha(){
 		glRotated(90,1,0,0);
 		gluCylinder(t2d,TRAVE_ESPESS, TRAVE_ESPESS, TRAVE_ALTURA,10,2);
 	glPopMatrix();
-	
+
 	gluQuadricDrawStyle(t1c, GLU_FILL);
 	glPushMatrix();
 		glTranslatef(posX - TRAVE_LARGURA/2, TRAVE_ALTURA, posZ1);
@@ -78,11 +78,11 @@ void Trave::desenha(){
 
 
 	//DESENHO DAS REDES
-	glLineWidth(0.01);
+	glLineWidth(0.5);
      glBegin(GL_LINES);
      for(i = 0; i<=GRADE;i++){
       //REDE1
-		//LADO1 
+		//LADO1
           glVertex3f(posX - TRAVE_LARGURA/2,TRAVE_ALTURA*i/GRADE,posZ1);
           glVertex3f(posX - TRAVE_LARGURA/2,TRAVE_ALTURA*i/GRADE,posZ1-TRAVE_ALTURA);
 
@@ -112,10 +112,10 @@ void Trave::desenha(){
 
           glVertex3f(posX + TRAVE_LARGURA/2*i/GRADE, TRAVE_ALTURA, posZ1);
           glVertex3f(posX + TRAVE_LARGURA/2*i/GRADE, TRAVE_ALTURA, posZ1 - TRAVE_ALTURA);
-     
-     
+
+
        //REDE2
-		 //LADO1 
+		 //LADO1
           glVertex3f(posX - TRAVE_LARGURA/2,TRAVE_ALTURA*i/GRADE,posZ2);
           glVertex3f(posX - TRAVE_LARGURA/2,TRAVE_ALTURA*i/GRADE,posZ2 + TRAVE_ALTURA);
 
@@ -146,8 +146,8 @@ void Trave::desenha(){
           glVertex3f(posX + TRAVE_LARGURA/2*i/GRADE, TRAVE_ALTURA, posZ2);
           glVertex3f(posX + TRAVE_LARGURA/2*i/GRADE, TRAVE_ALTURA, posZ2 + TRAVE_ALTURA);
      }
-     
+
      glEnd();
 
-     
+
 }

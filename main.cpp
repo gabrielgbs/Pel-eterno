@@ -1,18 +1,18 @@
 /*
       UNIVERSIDADE FEDERAL DO CEARA
         DEPARTAMENTO DE COMPUTACAO
-        
+
      TRABALHO II - COMPUTACAO GRAFICA I
         "O GOL QUE PELE NAO FEZ"
-        
-        
-        
+
+
+
       Gabriel Brito dos Santos
       Felipe Timbo Brito
       Jose Augusto Baltazar Alves
       Leonardo Silva Lins
       Paulo Eduardo Juvencio Neri
-      
+
       Projeto desenvolvido em sua maioria
       em C++, openGL e glut
 */
@@ -85,7 +85,7 @@ void inicializa (void)
 {
 	chutou = praFora = foiGol = false;
 	definindo = true;
-	
+
 	//glutSetKeyRepeat(GLUT_KEY_REPEAT_ON);
 
     glClearColor(COR_CEU);
@@ -93,14 +93,14 @@ void inicializa (void)
 	glShadeModel(GL_SMOOTH);
 
 	glEnable(GL_DEPTH_TEST);
-    
+
 	alvoX = alvoY = alvoZ = 0;
 	eyeX = 0 - TOL/2;
 	eyeZ = CCAMPO/2;
 	eyeY = 2;
 	anguloXZ = 90;
 	alturaVisao = 0;
-	
+
 	//INICIALIZAMOS OS VALORES INICIAIS DO CHUTE COMO 10m/s A 45�
 	velInicialChute = 10;
 	anguloChute = 45;
@@ -126,7 +126,7 @@ void paramProjecao(void)
 	glLoadIdentity();
 
 	gluLookAt(eyeX,eyeY,eyeZ, alvoX,alvoY,alvoZ, 0,1,0);
-	
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -178,11 +178,11 @@ void teclado(unsigned char key, int x, int y)
 		case 'r':
 			eyeY+=PASSO;
 			break;
-			
+
           case '+':
 			glutFullScreen();
 			break;
-			
+
           case '-':
 			glutInitWindowSize(LJANELAP,AJANELAP);
 			break;
@@ -193,7 +193,7 @@ void teclado(unsigned char key, int x, int y)
 			delete meuCenario;
 			exit(0);
 			break;
-			
+
           case 32:
 			if(definindo){
 				definindo = false;
@@ -202,7 +202,7 @@ void teclado(unsigned char key, int x, int y)
 				tempoInicial = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
 				sprintf (status, "Olho no lance...");
 			}
-			
+
 			break;
 			case 13:
 				if(!chutou)
@@ -216,41 +216,41 @@ void teclado(unsigned char key, int x, int y)
 void teclasEspeciais(int key, int x, int y)
 {
 	switch(key){
-			
+
 		case GLUT_KEY_LEFT:
 			anguloXZ = (anguloXZ + 2) % 360;
 			break;
-			
+
 		case GLUT_KEY_RIGHT:
 			anguloXZ = (360 + anguloXZ - 2) % 360;
 			break;
-			
+
 		case GLUT_KEY_UP:
 			alturaVisao = alturaVisao + .05;
 			break;
-			
+
 		case GLUT_KEY_DOWN:
 			alturaVisao = alturaVisao - .05;
 			break;
-			
+
 		case GLUT_KEY_PAGE_UP:
 			if(!chutou){
 				anguloChute = anguloChute + 1;
 				break;
 			}
-			
+
 		case GLUT_KEY_PAGE_DOWN:
 			if(!chutou){
 				anguloChute = anguloChute - 1;
 				break;
 			}
-			
+
 		case GLUT_KEY_HOME:
 			if(!chutou){
 				velInicialChute = velInicialChute + 1;
 				break;
 			}
-			
+
 		case GLUT_KEY_END:
 			if(!chutou){
 				velInicialChute = velInicialChute - 1;
@@ -259,10 +259,10 @@ void teclasEspeciais(int key, int x, int y)
 	}
 	if(anguloChute > ANGULOMAXCHUTE) anguloChute = ANGULOMAXCHUTE;
 	else if(anguloChute < ANGULOMINCHUTE) anguloChute = ANGULOMINCHUTE;
-	
+
 	if(velInicialChute > VELMAXCHUTE) velInicialChute = VELMAXCHUTE;
 	else if(velInicialChute < VELMINCHUTE) velInicialChute = VELMINCHUTE;
-	
+
     paramProjecao();
     //glutPostRedisplay();
 }
@@ -280,13 +280,13 @@ void subJanela(){
 	glutSetWindow (idSubJanela);
 	glClearColor (COR_CINZAESCURO, 1);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	if(definindo){
 		//ESCREVER DADOS
 		sprintf (rotulo, "Angulo: %d", anguloChute);
 		glRasterPos2f (0.05f, 0.90f);
 		escreveString(rotulo);
-	
+
 		sprintf (rotulo, "Velocidade: %d", velInicialChute);
 		glRasterPos2f (0.05f, 0.80f);
 		escreveString(rotulo);
@@ -299,22 +299,22 @@ void subJanela(){
 			glVertex2f (.2 + 0.025*VELMAXCHUTE, .1 + 0.025*VELMAXCHUTE);
 			glVertex2f (0.2, .1 + 0.025*VELMAXCHUTE);
 		glEnd ();
-	
+
 		glColor3f(COR_VERDE);
 		glBegin(GL_LINES);
 			glVertex2f(.2,.1);
 			glVertex2f(.2 + velInicialChute * 0.025*cos(anguloChute*PI/180),.1 + velInicialChute * 0.025*sin(anguloChute*PI/180));
 		glEnd();
-	
+
 		glutSwapBuffers ();
 	} else {
 		glRasterPos2f (0.1f, 0.60f);
 		sprintf (rotulo, "Status:");
 		escreveString(rotulo);
-		
+
 		glRasterPos2f (0.1f, 0.40f);
 		escreveString(status);
-		
+
 		glutSwapBuffers ();
 	}
 }
@@ -352,7 +352,7 @@ void funcaoIdle(){
 	static double posYBola;
 	static double velYBola;
 	static double anguloChuteRad;
-	
+
 	if(definindo){
 		posInicialZBola = CCAMPO/2;
 		posZBola = posInicialZBola;
@@ -376,8 +376,8 @@ void funcaoIdle(){
 		posYBola = posInicialYBola + velBola*sin(anguloChuteRad) * (glutGet(GLUT_ELAPSED_TIME) / 1000.0 - tempoInicial) - GRAVIDADE * (glutGet(GLUT_ELAPSED_TIME) / 1000.0 - tempoInicial) * (glutGet(GLUT_ELAPSED_TIME) / 1000.0 - tempoInicial) * 0.5;
 		//EQUACAO DA VELOCIDADE EM MRU
 		velYBola = velBola*sin(anguloChuteRad) - GRAVIDADE * (glutGet(GLUT_ELAPSED_TIME) / 1000.0 - tempoInicial);
-		
-		
+
+
 		if(((CCAMPO - posZBola)<0)){
 			if((!foiGol)&&(!praFora)){
 				if(TRAVE_ALTURA > posYBola){
@@ -391,15 +391,15 @@ void funcaoIdle(){
 			if(foiGol){
 				if(posZBola > (CCAMPO + TRAVE_ALTURA)){
 					posZBola = (CCAMPO + TRAVE_ALTURA);
-					
+
 				}
 				if(posYBola > TRAVE_ALTURA){
 					posYBola = TRAVE_ALTURA;
 				}
 			}
 		}
-		
-		
+
+
 		//AGORA DEFINIMOS A NOVA POSICAO DA BOLA
 		meuCenario->setPosBola(posXBola,posYBola,posZBola);
 	} else {
@@ -409,7 +409,7 @@ void funcaoIdle(){
 				sprintf (status, "QUE CHUTE PAIA!");
 		}
 	}
-	
+
 	//ATUALIZANDO AS DUAS JANELAS
 	glutSetWindow (idJanelaPrincipal);
 	glutPostRedisplay();
@@ -420,9 +420,11 @@ void funcaoIdle(){
 
 int main(int argc, char *argv[])
 {
- 	
+
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glEnable(GL_MULTISAMPLE);
+	glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
 
 	//JANELA PRINCIPAL
 	glutInitWindowSize(LJANELAP,AJANELAP);
@@ -439,19 +441,19 @@ int main(int argc, char *argv[])
 	glutPassiveMotionFunc(MoveMouseSolto);
 */
 	inicializa();
-	
+
 	//SUBJANELA
 	idSubJanela = glutCreateSubWindow(idJanelaPrincipal, 10, 10, LSJANELA, ASJANELA);
 	glutDisplayFunc(subJanela);
 	glutReshapeFunc(tamanhoSubJanela);
-  
+
 	glutMainLoop();
 
 	//SAINDO DO LOOP PRINCIPAL...
 	glutDestroyWindow(idSubJanela);
 	glutDestroyWindow(idJanelaPrincipal);
 	delete meuCenario;
-	
+
 }
 
 
