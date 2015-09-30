@@ -7,17 +7,15 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="default">
-				<Option output="ProjetoPele" prefix_auto="1" extension_auto="1" />
+				<Option output="PeleEterno" prefix_auto="1" extension_auto="1" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 			</Target>
 		</Build>
 		<Linker>
-			<Add library="glut32" />
-			<Add library="glu32" />
-			<Add library="opengl32" />
-			<Add library="winmm" />
-			<Add library="gdi32" />
+			<Add library="glut" />
+			<Add library="GLU" />
+			<Add library="GL" />
 		</Linker>
 		<Unit filename="Arquib.cpp" />
 		<Unit filename="Arquib.hpp" />
