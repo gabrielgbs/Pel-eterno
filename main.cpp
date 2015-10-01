@@ -210,10 +210,9 @@ void teclado(unsigned char key, int x, int y)
 			break;
 
     }
-    paramProjecao();
 }
 
-void teclasEspeciais(int key, int x, int y)
+void pressKey(int key, int x, int y)
 {
 	switch(key){
 
@@ -232,45 +231,33 @@ void teclasEspeciais(int key, int x, int y)
 		case GLUT_KEY_DOWN:
 			alturaVisao = alturaVisao - .05;
 			break;
-
 		case GLUT_KEY_PAGE_UP:
-			if(!chutou){
-				anguloChute = anguloChute + 1;
-				break;
+			if(!chutou && anguloChute < ANGULOMAXCHUTE){
+				anguloChute++;
 			}
-
+            break;
 		case GLUT_KEY_PAGE_DOWN:
-			if(!chutou){
-				anguloChute = anguloChute - 1;
-				break;
+			if(!chutou && anguloChute > ANGULOMINCHUTE){
+				anguloChute--;
 			}
-
+            break;
 		case GLUT_KEY_HOME:
-			if(!chutou){
-				velInicialChute = velInicialChute + 1;
-				break;
+			if(!chutou && velInicialChute < VELMAXCHUTE){
+				velInicialChute++;
 			}
-
+            break;
 		case GLUT_KEY_END:
-			if(!chutou){
-				velInicialChute = velInicialChute - 1;
-				break;
+			if(!chutou && velInicialChute > VELMINCHUTE){
+				velInicialChute--;
 			}
+			break;
 	}
-	if(anguloChute > ANGULOMAXCHUTE) anguloChute = ANGULOMAXCHUTE;
-	else if(anguloChute < ANGULOMINCHUTE) anguloChute = ANGULOMINCHUTE;
-
-	if(velInicialChute > VELMAXCHUTE) velInicialChute = VELMAXCHUTE;
-	else if(velInicialChute < VELMINCHUTE) velInicialChute = VELMINCHUTE;
-
-    paramProjecao();
-    //glutPostRedisplay();
 }
 
 //DESENHA A JANELA PRINCIPAL, ONDE FICA O CENARIO
 void janelaPrincipal(void)
 {
- 	 glutSetWindow (idJanelaPrincipal);
+    glutSetWindow (idJanelaPrincipal);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	meuCenario->desenha();
 	glutSwapBuffers();
@@ -434,7 +421,7 @@ int main(int argc, char *argv[])
 
 	//FUNCOES CALLBACK
 	glutKeyboardFunc(teclado);
-	glutSpecialFunc(teclasEspeciais);
+	glutSpecialFunc(pressKey);
 	glutIdleFunc(funcaoIdle);
 /*	glutMouseFunc(clickMouse);
 	glutMotionFunc(MoveMousePressionado);
