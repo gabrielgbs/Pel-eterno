@@ -58,7 +58,7 @@ Cenario *meuCenario = new Cenario(0,0,LCAMPO,CCAMPO);
 
 GLfloat aspecto;
 
-GLfloat eyeX, eyeY, eyeZ, alvoX, alvoY, alvoZ;
+GLfloat eyeX, eyeY, eyeZ, alvoX, alvoY, alvoZ, deltaEyeX, deltaEyeY, deltaEyeZ;
 
 GLfloat alturaVisao, deltaAlturaVisao = 0;
 
@@ -88,6 +88,8 @@ void escreveString(char *str){
 //INICIA OS VALORES
 void inicializa (void)
 {
+    deltaEyeX = deltaEyeZ = deltaEyeY = 0.0f;
+
 	chutou = praFora = foiGol = false;
 	definindo = true;
 
@@ -118,6 +120,9 @@ void paramProjecao(void)
 {
     anguloXZ += deltaAnguloXZ;
     alturaVisao += deltaAlturaVisao;
+    eyeZ += deltaEyeZ;
+    eyeX += deltaEyeX;
+    eyeY += deltaEyeY;
 
 	alvoX = eyeX + RAIO_VISAO*sin(anguloXZ);
 	alvoZ = eyeZ + RAIO_VISAO*cos(anguloXZ);
@@ -137,87 +142,114 @@ void paramProjecao(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
-
-/*
-void MoveMousePressionado(int x, int y)
+void pressMovementKey(unsigned char key, int x, int y)
 {
-	if(x > mouseX) anguloXZ = anguloXZ - 1;
-	if(x < mouseX) anguloXZ = anguloXZ + 1;
-     glutPostRedisplay();
-}
-
-void MoveMouseSolto(int x, int y)
-{
-	if(x > mouseX) anguloXZ = anguloXZ - 1;
-	if(x < mouseX) anguloXZ = anguloXZ + 1;
-	mouseX = x;
-     glutPostRedisplay();
-}
-*/
-void teclado(unsigned char key, int x, int y)
-{
-	switch (key) {
-		case 'W':
-		case 'w':
-			eyeZ = eyeZ + PASSO*cos(anguloXZ*PI/180);
-			eyeX = eyeX + PASSO*sin(anguloXZ*PI/180);
-			break;
-		case 'S':
-		case 's':
-			eyeZ = eyeZ - PASSO*cos(anguloXZ*PI/180);
-			eyeX = eyeX - PASSO*sin(anguloXZ*PI/180);
-			break;
-		case 'A':
-		case 'a':
-			eyeZ = eyeZ + PASSO*cos((anguloXZ+90)*PI/180);
-			eyeX = eyeX + PASSO*sin((anguloXZ+90)*PI/180);
-			break;
-		case 'D':
-		case 'd':
-			eyeZ = eyeZ - PASSO*cos((anguloXZ+90)*PI/180);
-			eyeX = eyeX - PASSO*sin((anguloXZ+90)*PI/180);
-			break;
-		case 'F':
-		case 'f':
-			eyeY-=PASSO;
-			break;
-		case 'R':
-		case 'r':
-			eyeY+=PASSO;
-			break;
-
-          case '+':
-			glutFullScreen();
-			break;
-
-          case '-':
-			glutInitWindowSize(LJANELAP,AJANELAP);
-			break;
-
-		case 27:
-			glutDestroyWindow(idSubJanela);
-			glutDestroyWindow(idJanelaPrincipal);
-			delete meuCenario;
-			exit(0);
-			break;
-
-          case 32:
-			if(definindo){
-				definindo = false;
-				velBola = velInicialChute;
-				chutou = true;
-				tempoInicial = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
-				sprintf (status, "Olho no lance...");
-			}
-
-			break;
-			case 13:
-				if(!chutou)
-					inicializa();
-			break;
+    switch (key)
+    {
+    case 'W':
+    case 'w':
+        deltaEyeZ = PASSO*cos(anguloXZ);
+        deltaEyeX = PASSO*sin(anguloXZ);
+        break;
+    case 'S':
+    case 's':
+        deltaEyeZ = -PASSO*cos(anguloXZ);
+        deltaEyeX = -PASSO*sin(anguloXZ);
+        break;
+    case 'A':
+    case 'a':
+        deltaEyeZ = PASSO*cos((anguloXZ+M_PI_2));
+        deltaEyeX = PASSO*sin((anguloXZ+M_PI_2));
+        break;
+    case 'D':
+    case 'd':
+        deltaEyeZ = -PASSO*cos((anguloXZ+M_PI_2));
+        deltaEyeX = -PASSO*sin((anguloXZ+M_PI_2));
+        break;
+    case 'F':
+    case 'f':
+        deltaEyeY = -PASSO;
+        break;
+    case 'R':
+    case 'r':
+        deltaEyeY = PASSO;
+        break;
 
     }
+}
+
+void releaseMovementKey(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'W':
+    case 'w':
+        deltaEyeZ = deltaEyeX = 0;
+        break;
+    case 'S':
+    case 's':
+        deltaEyeZ = deltaEyeX = 0;
+        break;
+    case 'A':
+    case 'a':
+        deltaEyeZ = deltaEyeX = 0;
+        break;
+    case 'D':
+    case 'd':
+        deltaEyeZ = deltaEyeX = 0;
+        break;
+    case 'F':
+    case 'f':
+    case 'R':
+    case 'r':
+        deltaEyeY = 0;
+        break;
+    }
+}
+
+void pressKey(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+
+    case '+':
+        glutFullScreen();
+        break;
+
+    case '-':
+        glutInitWindowSize(LJANELAP,AJANELAP);
+        break;
+
+    case 27:
+        glutDestroyWindow(idSubJanela);
+        glutDestroyWindow(idJanelaPrincipal);
+        delete meuCenario;
+        exit(0);
+        break;
+
+    case 32:
+        if(definindo)
+        {
+            definindo = false;
+            velBola = velInicialChute;
+            chutou = true;
+            tempoInicial = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+            sprintf (status, "Olho no lance...");
+        }
+
+        break;
+    case 13:
+        if(!chutou)
+            inicializa();
+        break;
+
+    }
+    pressMovementKey(key, x, y);
+}
+
+void releaseKey(unsigned char key, int x, int y)
+{
+    releaseMovementKey(key, x, y);
 }
 
 void pressDirectionalKey(int key, int x, int y)
@@ -260,7 +292,7 @@ void releaseDirectionalKey(int key, int x, int y)
     }
 }
 
-void pressKey(int key, int x, int y)
+void pressSpecialKey(int key, int x, int y)
 {
 	switch(key){
 		case GLUT_KEY_PAGE_UP:
@@ -291,7 +323,7 @@ void pressKey(int key, int x, int y)
 	pressDirectionalKey(key,x,y);
 }
 
-void releaseKey(int key, int x, int y)
+void releaseSpecialKey(int key, int x, int y)
 {
     releaseDirectionalKey(key, x, y);
 }
@@ -386,10 +418,7 @@ void funcaoIdle(){
 		posInicialZBola = CCAMPO/2;
 		posZBola = posInicialZBola;
 	}
-/*
-     static double velZBola = velBola*cos(anguloChute);
-	static double velInicialYBola = velBola*sin(anguloChute);
-*/
+
  	if ((chutou)&&(velBola > 0.1)){
     anguloChuteRad = anguloChute*PI/180;
 
@@ -462,14 +491,11 @@ int main(int argc, char *argv[])
 	glutReshapeFunc(tamanhoJanelaPrincipal);
 
 	//FUNCOES CALLBACK
-	glutKeyboardFunc(teclado);
-	glutSpecialFunc(pressKey);
-	glutSpecialUpFunc(releaseKey);
+	glutKeyboardFunc(pressKey);
+	glutKeyboardUpFunc(releaseKey);
+	glutSpecialFunc(pressSpecialKey);
+	glutSpecialUpFunc(releaseSpecialKey);
 	glutIdleFunc(funcaoIdle);
-/*	glutMouseFunc(clickMouse);
-	glutMotionFunc(MoveMousePressionado);
-	glutPassiveMotionFunc(MoveMouseSolto);
-*/
 	inicializa();
 
 	//SUBJANELA
