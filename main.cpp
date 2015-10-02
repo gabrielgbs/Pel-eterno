@@ -34,6 +34,7 @@
 #define RAIO_VISAO 1
 #define ALTURA_MAX 10
 #define PASSO .5
+#define DELTA_CAMERA_MOVE .02
 
 #define GRAVIDADE 9.8
 
@@ -55,9 +56,13 @@
 
 Cenario *meuCenario = new Cenario(0,0,LCAMPO,CCAMPO);
 
-GLfloat eyeX, eyeY, eyeZ, alvoX, alvoY, alvoZ, alturaVisao, aspecto, deltaAlturaVisao = 0;
+GLfloat aspecto;
 
-int anguloXZ, deltaAnguloXZ = 0;
+GLfloat eyeX, eyeY, eyeZ, alvoX, alvoY, alvoZ;
+
+GLfloat alturaVisao, deltaAlturaVisao = 0;
+
+GLfloat anguloXZ, deltaAnguloXZ = 0;
 //int mouseX, mouseY;
 
 double tempoInicial;
@@ -98,7 +103,7 @@ void inicializa (void)
 	eyeX = 0 - TOL/2;
 	eyeZ = CCAMPO/2;
 	eyeY = 2;
-	anguloXZ = 90;
+	anguloXZ = M_PI_2;
 	alturaVisao = 0;
 
 	//INICIALIZAMOS OS VALORES INICIAIS DO CHUTE COMO 10m/s A 45�
@@ -114,8 +119,8 @@ void paramProjecao(void)
     anguloXZ += deltaAnguloXZ;
     alturaVisao += deltaAlturaVisao;
 
-	alvoX = eyeX + RAIO_VISAO*sin(anguloXZ*PI/180);
-	alvoZ = eyeZ + RAIO_VISAO*cos(anguloXZ*PI/180);
+	alvoX = eyeX + RAIO_VISAO*sin(anguloXZ);
+	alvoZ = eyeZ + RAIO_VISAO*cos(anguloXZ);
 	alvoY = eyeY + alturaVisao;
 
 	glMatrixMode(GL_PROJECTION);
@@ -221,19 +226,19 @@ void pressDirectionalKey(int key, int x, int y)
     {
 
 		case GLUT_KEY_LEFT:
-            deltaAnguloXZ = 1;
+            deltaAnguloXZ = DELTA_CAMERA_MOVE;
 			break;
 
 		case GLUT_KEY_RIGHT:
-            deltaAnguloXZ = -1;
+            deltaAnguloXZ = -DELTA_CAMERA_MOVE;
 			break;
 
 		case GLUT_KEY_UP:
-			deltaAlturaVisao = .02;
+			deltaAlturaVisao = DELTA_CAMERA_MOVE;
 			break;
 
 		case GLUT_KEY_DOWN:
-			deltaAlturaVisao = -.02;
+			deltaAlturaVisao = -DELTA_CAMERA_MOVE;
 			break;
     }
 }
@@ -259,22 +264,26 @@ void pressKey(int key, int x, int y)
 {
 	switch(key){
 		case GLUT_KEY_PAGE_UP:
-			if(!chutou && anguloChute < ANGULOMAXCHUTE){
+			if(!chutou && anguloChute < ANGULOMAXCHUTE)
+			{
 				anguloChute++;
 			}
             break;
 		case GLUT_KEY_PAGE_DOWN:
-			if(!chutou && anguloChute > ANGULOMINCHUTE){
+			if(!chutou && anguloChute > ANGULOMINCHUTE)
+			{
 				anguloChute--;
 			}
             break;
 		case GLUT_KEY_HOME:
-			if(!chutou && velInicialChute < VELMAXCHUTE){
+			if(!chutou && velInicialChute < VELMAXCHUTE)
+			{
 				velInicialChute++;
 			}
             break;
 		case GLUT_KEY_END:
-			if(!chutou && velInicialChute > VELMINCHUTE){
+			if(!chutou && velInicialChute > VELMINCHUTE)
+			{
 				velInicialChute--;
 			}
 			break;
