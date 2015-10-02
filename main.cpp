@@ -57,7 +57,7 @@ Cenario *meuCenario = new Cenario(0,0,LCAMPO,CCAMPO);
 
 GLfloat eyeX, eyeY, eyeZ, alvoX, alvoY, alvoZ, alturaVisao, aspecto;
 
-int anguloXZ;
+int anguloXZ, deltaAnguloXZ = 0;
 //int mouseX, mouseY;
 
 double tempoInicial;
@@ -111,6 +111,8 @@ void inicializa (void)
 //AQUI DEFINIMOS PARAMETROS DE PROJECAO E POSICAO DA CAMERA
 void paramProjecao(void)
 {
+    anguloXZ += deltaAnguloXZ;
+
 	alvoX = eyeX + RAIO_VISAO*sin(anguloXZ*PI/180);
 	alvoZ = eyeZ + RAIO_VISAO*cos(anguloXZ*PI/180);
 	alvoY = eyeY + alturaVisao;
@@ -212,6 +214,43 @@ void teclado(unsigned char key, int x, int y)
     }
 }
 
+void pressDirectionalKey(int key, int x, int y)
+{
+    switch(key)
+    {
+
+		case GLUT_KEY_LEFT:
+            deltaAnguloXZ = 1;
+			//anguloXZ = (anguloXZ + 2) % 360;
+			break;
+
+		case GLUT_KEY_RIGHT:
+            deltaAnguloXZ = -1;
+			//anguloXZ = (360 + anguloXZ - 2) % 360;
+			break;
+
+		case GLUT_KEY_UP:
+			alturaVisao = alturaVisao + .05;
+			break;
+
+		case GLUT_KEY_DOWN:
+			alturaVisao = alturaVisao - .05;
+			break;
+    }
+}
+
+void releaseDirectionalKey(int key, int x, int y)
+{
+    switch(key)
+    {
+        case GLUT_KEY_LEFT:
+		case GLUT_KEY_RIGHT:
+			deltaAnguloXZ = 0;
+			break;
+
+    }
+}
+
 void pressKey(int key, int x, int y)
 {
 	switch(key){
@@ -252,6 +291,12 @@ void pressKey(int key, int x, int y)
 			}
 			break;
 	}
+	pressDirectionalKey(key,x,y);
+}
+
+void releaseKey(int key, int x, int y)
+{
+    releaseDirectionalKey(key, x, y);
 }
 
 //DESENHA A JANELA PRINCIPAL, ONDE FICA O CENARIO
@@ -422,6 +467,7 @@ int main(int argc, char *argv[])
 	//FUNCOES CALLBACK
 	glutKeyboardFunc(teclado);
 	glutSpecialFunc(pressKey);
+	glutSpecialUpFunc(releaseKey);
 	glutIdleFunc(funcaoIdle);
 /*	glutMouseFunc(clickMouse);
 	glutMotionFunc(MoveMousePressionado);
