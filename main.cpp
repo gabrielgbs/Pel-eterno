@@ -55,7 +55,7 @@
 
 Cenario *meuCenario = new Cenario(0,0,LCAMPO,CCAMPO);
 
-GLfloat eyeX, eyeY, eyeZ, alvoX, alvoY, alvoZ, alturaVisao, aspecto;
+GLfloat eyeX, eyeY, eyeZ, alvoX, alvoY, alvoZ, alturaVisao, aspecto, deltaAlturaVisao = 0;
 
 int anguloXZ, deltaAnguloXZ = 0;
 //int mouseX, mouseY;
@@ -112,6 +112,7 @@ void inicializa (void)
 void paramProjecao(void)
 {
     anguloXZ += deltaAnguloXZ;
+    alturaVisao += deltaAlturaVisao;
 
 	alvoX = eyeX + RAIO_VISAO*sin(anguloXZ*PI/180);
 	alvoZ = eyeZ + RAIO_VISAO*cos(anguloXZ*PI/180);
@@ -221,20 +222,18 @@ void pressDirectionalKey(int key, int x, int y)
 
 		case GLUT_KEY_LEFT:
             deltaAnguloXZ = 1;
-			//anguloXZ = (anguloXZ + 2) % 360;
 			break;
 
 		case GLUT_KEY_RIGHT:
             deltaAnguloXZ = -1;
-			//anguloXZ = (360 + anguloXZ - 2) % 360;
 			break;
 
 		case GLUT_KEY_UP:
-			alturaVisao = alturaVisao + .05;
+			deltaAlturaVisao = .02;
 			break;
 
 		case GLUT_KEY_DOWN:
-			alturaVisao = alturaVisao - .05;
+			deltaAlturaVisao = -.02;
 			break;
     }
 }
@@ -248,28 +247,17 @@ void releaseDirectionalKey(int key, int x, int y)
 			deltaAnguloXZ = 0;
 			break;
 
+        case GLUT_KEY_UP:
+        case GLUT_KEY_DOWN:
+			deltaAlturaVisao = 0;
+			break;
+
     }
 }
 
 void pressKey(int key, int x, int y)
 {
 	switch(key){
-
-		case GLUT_KEY_LEFT:
-			anguloXZ = (anguloXZ + 2) % 360;
-			break;
-
-		case GLUT_KEY_RIGHT:
-			anguloXZ = (360 + anguloXZ - 2) % 360;
-			break;
-
-		case GLUT_KEY_UP:
-			alturaVisao = alturaVisao + .05;
-			break;
-
-		case GLUT_KEY_DOWN:
-			alturaVisao = alturaVisao - .05;
-			break;
 		case GLUT_KEY_PAGE_UP:
 			if(!chutou && anguloChute < ANGULOMAXCHUTE){
 				anguloChute++;
